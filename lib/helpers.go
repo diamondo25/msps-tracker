@@ -9,23 +9,6 @@ import (
 	"strconv"
 )
 
-type PrivateServer interface {
-	FetchAmount() (int, error)
-	GetName() string
-}
-
-type ReturnsUserCount interface {
-	UserCount() int
-}
-
-func FetchPageJsonParsed(url string, ruc ReturnsUserCount) (int, error) {
-	err := FetchPageJson(url, ruc)
-	if err != nil {
-		return 0, err
-	}
-	return ruc.UserCount(), nil
-}
-
 func FetchPageJson(url string, obj interface{}) error {
 	resp, err := http.Get(url)
 	if err != nil {

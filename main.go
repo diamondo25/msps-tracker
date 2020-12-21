@@ -23,14 +23,14 @@ func main() {
 			for {
 				amount, err := ps.FetchAmount()
 				if err != nil {
-					log.Println("[", ps.GetName(), "] unable to fetch: ", err)
+					log.Println("[", ps.Name, "] unable to fetch: ", err)
 				} else {
-					log.Println("[", ps.GetName(), "] Online count: ", amount)
+					log.Println("[", ps.Name, "] Online count: ", amount)
 
 					doc := &lib.ElasticSearchDocument{}
 					doc.Timestamp = time.Now()
 					doc.OnlineCount = amount
-					doc.ServerName = ps.GetName()
+					doc.ServerName = ps.Name
 
 					if err := cfg.ElasticSearch.Write(doc); err != nil {
 						log.Println("Unable to write to ES", err)

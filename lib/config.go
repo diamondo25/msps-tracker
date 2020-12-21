@@ -46,14 +46,10 @@ func (s *ServerConfig) FetchAmount() (int, error) {
 	return 0, errors.Errorf("unsupported fetch? no regex or json key found")
 }
 
-func (s ServerConfig) GetName() string { return s.Name }
-
-var _ PrivateServer = (*ServerConfig)(nil)
-
 type Config struct {
-	Servers []ServerConfig `yaml:"servers"`
-	ElasticSearch ElasticSearch `yaml:"elastic_search"`
-	Interval string
+	Servers       []ServerConfig `yaml:"servers"`
+	ElasticSearch ElasticSearch  `yaml:"elastic_search"`
+	Interval      string
 }
 
 func NewConfig(file string) *Config {
