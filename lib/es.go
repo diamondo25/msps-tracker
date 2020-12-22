@@ -43,6 +43,8 @@ func (es *ElasticSearch) Write(doc *ElasticSearchDocument) error {
 		return errors.Wrap(err, "unable to send data")
 	}
 
+	defer resp.Body.Close()
+
 	if resp.StatusCode/100 != 2 {
 		return errors.Errorf("got error code %d", resp.StatusCode)
 	}

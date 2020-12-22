@@ -9,15 +9,25 @@ import (
 	"strconv"
 )
 
-func FetchPageJson(url string, obj interface{}) error {
+func FetchPage(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return errors.Wrap(err, "unable to get online users")
+		return nil, errors.Wrap(err, "unable to get online users")
 	}
+	defer resp.Body.Close()
 
 	allData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return errors.Wrap(err, "unable to read all data")
+		return nil, errors.Wrap(err, "unable to read all data")
+	}
+
+	return allData, nil
+}
+
+func FetchPageJson(url string, obj interface{}) error {
+	allData, err := FetchPage(url)
+	if err != nil {
+		return errors.Wrap(err, "unable to fetch page")
 	}
 
 	if err := json.Unmarshal(allData, obj); err != nil {
@@ -28,14 +38,9 @@ func FetchPageJson(url string, obj interface{}) error {
 }
 
 func FetchPageRegex(url string, regex *regexp.Regexp) (int, error) {
-	resp, err := http.Get(url)
+	allData, err := FetchPage(url)
 	if err != nil {
-		return 0, errors.Wrap(err, "unable to download website")
-	}
-
-	allData, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return 0, errors.Wrap(err, "unable to read all data")
+		return 0, errors.Wrap(err, "unable to fetch page")
 	}
 
 	subMatch := regex.FindStringSubmatch(string(allData))
