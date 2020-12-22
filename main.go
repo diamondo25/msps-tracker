@@ -21,6 +21,7 @@ func main() {
 		go func(ps lib.ServerConfig) {
 			t := time.Tick(refreshInterval)
 			for {
+				start := time.Now()
 				amount, err := ps.FetchAmount()
 				if err != nil {
 					log.Println("[", ps.Name, "] unable to fetch: ", err)
@@ -31,6 +32,7 @@ func main() {
 					doc.Timestamp = time.Now()
 					doc.OnlineCount = amount
 					doc.ServerName = ps.Name
+					doc.ResponseTimeMilliseconds = int(time.Since(start) / time.Millisecond)
 
 					if err := cfg.ElasticSearch.Write(doc); err != nil {
 						log.Println("Unable to write to ES", err)

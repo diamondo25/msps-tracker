@@ -15,9 +15,10 @@ type ElasticSearch struct {
 }
 
 type ElasticSearchDocument struct {
-	Timestamp   time.Time `json:"@timestamp"`
-	ServerName  string    `json:"server_name"`
-	OnlineCount int       `json:"online_count"`
+	Timestamp                time.Time `json:"@timestamp"`
+	ServerName               string    `json:"server_name"`
+	OnlineCount              int       `json:"online_count"`
+	ResponseTimeMilliseconds int       `json:"response_time_ms"`
 }
 
 func (es *ElasticSearch) Write(doc *ElasticSearchDocument) error {
